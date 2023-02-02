@@ -1,0 +1,34 @@
+-Symbols initialize data on login
+-Problem with graph when using filters
+-Extend the win rate to fit the symbol section height
+-Performance growth should be last
+-performance chart remove undefined bar
+-Performance growth show percentage on bar
+-Insight add the colours to headings
+-Insights add the hover over largest profit and loss
+-Loading problem in doughnut section
+-win rate doghnut is linked to the other doughnuts and must change with the filters
+-calendar does not work
+-Sidebar should look like the previous site
+-Journal summary sizing should be the same in length
+-Journal summary under Journal not able to see all the data at a glance
+-journal summary change colours to loss for red and blue for won
+-journal summary change heading bar to blue
+-journal summary pop up screenshot image does not expand, delete button does not work, when press on save window should close, also the save close colours should be like previous site
+-journal summary pop does not work under group
+-Account summary not showing data for journal
+-Account summary colours for sell and buy should be red and blue respectively as well as won and loss
+--Account summary Journal column is missing. Make sure the pop works like the previous site
+--Account summary check box under ticket is missing with functionality
+-Every table in the site should be ordered from most recent 
+-Account summary change colours for sell and buy for History
+-Sessions pop under Number of trades row does not work
+-Profile page should be like the previous (just one page) with tabs
+-Profile page does not work.
+-Profile page not able to change picture
+-Profile page does not work like the previous site
+-Progfile page plans does not work
+-login page does not have forgot password
+-register does not work.Please go through this link http://154.44.150.137/register.php to see how register page works
+-Also change the purple colour to the yellow colour used on the previous site
+-general user does not work
