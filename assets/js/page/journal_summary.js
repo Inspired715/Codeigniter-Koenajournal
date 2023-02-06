@@ -135,35 +135,12 @@ function modalAccountDetailShow(ticket_id){
   // $('#trade_journal_modal').modal()
 }
 
-function getGroupJournalModal(ticket_id, group_id) {
-  
-  if (group_id) {
 
-    
-    $.ajax({
-      url: "./lib/actions.php",
-      method: "POST",
-      data: { action: "getJournalGroupedTickets", group_id: group_id },
-      success: function (response) {
-          response = JSON.parse(response);
-          
-          if (response["status"] == "success") {
-            $('#JournalSummaryGridGrpValue').val(response.data);
-            getJournalDetailsGroupModal(response.data);
-          } else {
-            alert("Invalid group ID");
-          }
-      }
-    });
-    
-  }
-}
-
-$("body").on('click','.deleteTimeframe',function () {
+$('body').on('click','.deleteTimeframe',function () {
   var timeframe = $(this).attr('data-timeframe');
   var ticket_id = $('#jTicket').val();
     $.ajax({
-      url: "deleteSSTimeframe",
+      url: BASE_URL + "summary/deleteSSTimeframe",
       method: "POST",
       data: {
         timeframe: timeframe,
@@ -175,7 +152,7 @@ $("body").on('click','.deleteTimeframe',function () {
         if (response["status"] == "success") {
           //$(this).parent('.timeframeId-wrap').first().find('.fancybox').attr("src",'data:image/jpg;charset=utf8;base64');
     $('#container-'+timeframe+' .fancybox').css("display",'none');
-    $(this).hide();
+    $(this).hide(); 
           // notifyme.showNotification(response["status"], response["message"]);
         }else{
           // notifyme.showNotification(response["status"], response["message"]);
@@ -188,48 +165,6 @@ $("body").on("click",".showmore-timframes", function(){
   $(".timeframe-wrap-hide").toggle(); 
 })
 
-function SSTimeFrameReload(ticket_id, el) {
-  $.ajax({
-    url: BASE_URL + "/summary/SSTimeFrameReload",
-    method: "POST",
-    data: {
-      ticket_id: ticket_id,
-      field: el
-    },
-    success: function (response) {
-      response = JSON.parse(response);
-      if (response["status"] == "success") {
-        var image_data = response['data'][0];
-        console.log(image_data);
-        var image = image_data['SS'+el];
-        $('#ava-'+ el).attr('src', image);
-        $('#container-'+ el).attr('href', image);
-        $('#ava-'+ el).show();
-        _rebiuld_photoswipe();
-      }
-    }
-  });
-}
-
-function _buysellBage(value) {
-  var res = '';
-  if (value=='Buy') {
-    res = '<span class="badge light badge-success">Buy</span>';
-    } else if (value=='Sell') {
-      res = '<span class="badge light badge-info">Sell</span>';
-    }
-  return res;
-}
-
-function _wonlossBage(value, show=false) {
-  var res = (Number(value) > 0) 
-    ? '<span class="badge light badge-primary">WON</span>'
-    : '<span class="badge light badge-info">LOSS</span>';
-  if (show) {
-    res = res + '&nbsp;' + ((Number(value) > 0 ) ? '+' : '') +  value;
-    }
-    return res;
-}
 function getFancyItems(pic) {
   var items = [];
     $(pic).find('a[class=fancybox]').each(function() {
@@ -300,23 +235,66 @@ function _rebiuld_photoswipe() {
   });
 }
 
+function SSTimeFrameReload(ticket_id, el) {
+  $.ajax({
+    url: BASE_URL + "/summary/SSTimeFrameReload",
+    method: "POST",
+    data: {
+      ticket_id: ticket_id,
+      field: el
+    },
+    success: function (response) {
+      response = JSON.parse(response);
+      if (response["status"] == "success") {
+        var image_data = response['data'][0];
+        console.log(image_data);
+        var image = image_data['SS'+el];
+        $('#ava-'+ el).attr('src', image);
+        $('#container-'+ el).attr('href', image);
+        $('#ava-'+ el).show();
+        _rebiuld_photoswipe();
+      }
+    }
+  });
+}
+
+function _buysellBage(value) {
+  var res = '';
+  if (value=='Buy') {
+    res = '<span class="badge light badge-success">Buy</span>';
+    } else if (value=='Sell') {
+      res = '<span class="badge light badge-danger">Sell</span>';
+    }
+  return res;
+}
+
+function _wonlossBage(value, show=false) {
+  var res = (Number(value) > 0) 
+    ? '<span class="badge light badge-primary">WON</span>'
+    : '<span class="badge light badge-danger">LOSS</span>';
+  if (show) {
+    res = res + '&nbsp;' + ((Number(value) > 0 ) ? '+' : '') +  value;
+    }
+    return res;
+}
+
 function getJournalDetailsGroupModal(ticket_id) {
   var account_id = $("#selectAccountIds").val();
 
 
-  $('#listReasonForEntry option:selected').removeAttr('selected');
-  $('#listReasonForEntry option[value=""]').attr('selected', 'selected');
+  $('#listReasonForEntry1 option:selected').removeAttr('selected');
+  $('#listReasonForEntry1 option[value=""]').attr('selected', 'selected');
 
   $('#listReasonForExit option:selected').removeAttr('selected');
   $('#listReasonForExit option[value=""]').attr('selected', 'selected');
 
-  $('#listReasonForOutcome option:selected').removeAttr('selected');
-  $('#listReasonForOutcome option[value=""]').attr('selected', 'selected');
+  $('#listReasonForOutcome1 option:selected').removeAttr('selected');
+  $('#listReasonForOutcome1 option[value=""]').attr('selected', 'selected');
 
-  $('#listStrategyUsed option:selected').removeAttr('selected');
-  $('#listStrategyUsed option[value=""]').attr('selected', 'selected');
+  $('#listStrategyUsed1 option:selected').removeAttr('selected');
+  $('#listStrategyUsed1 option[value=""]').attr('selected', 'selected');
 
-  $('#listHowICanImprove').val('');
+  $('#listHowICanImprove1').val('');
 
   $('#ticket-TimeFrame1').val(ticket_id);
   $('#ticket-TimeFrame2').val(ticket_id);
@@ -349,10 +327,9 @@ function getJournalDetailsGroupModal(ticket_id) {
   $('#container-TimeFrame5').attr('href', '#');
 
   $.ajax({
-    url: "getJournalMainDetailsModal",
+    url: BASE_URL + "summary/getJournalMainDetailsModal",
     method: "POST",
     data: {
-      action: "getJournalMainDetailsModal",
       account_id: account_id,
       ticket_id: ticket_id,
     },
@@ -437,21 +414,21 @@ function getJournalDetailsGroupModal(ticket_id) {
           var row = this;
           var content = 
             "<tr>" +
-              "<td class='sect_td2'>" + row.ticket + "</td>" +
-              "<td class='sect_td2'>" + row.symbol + "</td>" +
-              "<td class='sect_td2'>" + _buysellBage(row.type) + "</td>" +
-              "<td class='sect_td2'>" + row.lots + "</td>" +
-              "<td class='sect_td2'> " + _wonlossBage(row.outcome, true) + "</td>" +
+              "<td>" + row.ticket + "</td>" +
+              "<td>" + row.symbol + "</td>" +
+              "<td>" + _buysellBage(row.type) + "</td>" +
+              "<td>" + row.lots + "</td>" +
+              "<td> " + _wonlossBage(row.outcome, true) + "</td>" +
             "</tr>";
           $('#jornalModalRows').append(content);
           });
-          $('#listReasonForEntry option[value="' + data.ReasonForEntry + '"]').attr('selected', 'selected');
+          $('#listReasonForEntry1 option[value="' + data.ReasonForEntry + '"]').attr('selected', 'selected');
           $('#textBoxReasonForEntry').val(data.ReasonForEntry);
-          $('#listReasonForOutcome option[value="' + data.ReasonForOutcome + '"]').attr('selected', 'selected');
+          $('#listReasonForOutcome1 option[value="' + data.ReasonForOutcome + '"]').attr('selected', 'selected');
           $('#textBoxReasonForOutcome').val(data.ReasonForOutcome);
-          $('#listStrategyUsed option[value="' + data.StrategyUsed + '"]').attr('selected', 'selected');
+          $('#listStrategyUsed1 option[value="' + data.StrategyUsed + '"]').attr('selected', 'selected');
           $('#textBoxStrategyUsed').val(data.StrategyUsed);
-          $('#listHowICanImprove').val(data.HowICanImprove);
+          $('#listHowICanImprove1').val(data.HowICanImprove);
         
           if(multiSelect){
             $('.outcomes-section').hide();
@@ -467,16 +444,16 @@ function getJournalDetailsGroupModal(ticket_id) {
             $('.floatingpoint-journal-time').html(data.floating_diff);
           }
           
-         $('#listStrategyUsed').change(function() {
-            $('#textBoxStrategyUsed').val($('#listStrategyUsed').val());
+         $('#listStrategyUsed1').change(function() {
+            $('#textBoxStrategyUsed').val($('#listStrategyUsed1').val());
          });
 
-         $('#listReasonForOutcome').change(function() {
-            $('#textBoxReasonForOutcome').val($('#listReasonForOutcome').val());
+         $('#listReasonForOutcome1').change(function() {
+            $('#textBoxReasonForOutcome').val($('#listReasonForOutcome1').val());
          });
 
-         $('#listReasonForEntry').change(function() {
-            $('#textBoxReasonForEntry').val($('#listReasonForEntry').val());
+         $('#listReasonForEntry1').change(function() {
+            $('#textBoxReasonForEntry').val($('#listReasonForEntry1').val());
          });
         
         $("#trade_journal_modal").modal("show");
@@ -495,9 +472,33 @@ function _jpeg(img) {
     : "data:image/jpg;charset=utf8;base64," + img;
 }
 
+function getGroupJournalModal(ticket_id, group_id) {
+  
+  if (group_id) {
 
+    
+    $.ajax({
+      url: BASE_URL + "summary/getJournalGroupedTickets",
+      method: "POST",
+      data: { 
+        group_id: group_id
+      },
+      success: function (response) {
+          response = JSON.parse(response);
+          
+          if (response["status"] == "success") {
+            $('#JournalSummaryGridGrpValue').val(response.data);
+            getJournalDetailsGroupModal(response.data);
+          } else {
+            alert("Invalid group ID");
+          }
+      }
+    });
+    
+  }
+}
 
-function getJournalTable() {
+function getJournalTableFilter() {
   var cDate = new Date();
   $("#journal_grid_all").DataTable({
     language: {
@@ -510,7 +511,7 @@ function getJournalTable() {
     ordering:false,
     ajax: function (data, callback, settings) {
       $.ajax({
-        url: "getJournalTableAll",
+        url: BASE_URL + "summary/getJournalTableAllFilter",
         method: "POST",
         data: {
           account_id: _account_id,
@@ -536,7 +537,69 @@ function getJournalTable() {
           if (d > 0) {
             return `<span class="badge light badge-success">WON</span>&nbsp;&nbsp;+${d}`;
           } else {
-            return `<span class="badge light badge-info">Loss </span>&nbsp;&nbsp;${d}`;
+            return `<span class="badge light badge-danger">Loss </span>&nbsp;&nbsp;${d}`;
+          }
+        },
+      },
+      { data: "StrategyUsed" },
+      { data: "ReasonForEntry" },
+      { data: "ReasonForOutcome"},
+      { data: "HowICanImprove"},
+      { render: function (data, type, full, meta) {
+        return (
+          // 1
+          '<a class=" modalOpenJournal px-3" href="javascript:void(0)" onClick="modalAccountDetailShow(' +
+          full.OrderNumber + ',' + full.Acc_Id +
+          ');" id="' +
+          full.OrderNumber +
+          '" ><img src="../assets/img/j-icon-1.png"></a>'
+        );
+      },
+    },
+    ],
+  });
+}
+
+function getJournalTable() {
+  var cDate = new Date();
+  $("#journal_grid_all").DataTable({
+    language: {
+      paginate: {
+        next: '&#62;', // or '→'
+        previous: '&#60;' // or '←' 
+      }
+    },
+    destroy: true,
+    ordering:false,
+    ajax: function (data, callback, settings) {
+      $.ajax({
+        url: BASE_URL + "summary/getJournalTableAll",
+        method: "POST",
+        data: {
+          account_id: _account_id,
+          start_date: "",
+          end_date: ""
+        },
+        success: function (response) {
+          response = JSON.parse(response);
+          callback(response);
+        },
+      });
+    },
+    columns: [
+      { render: function (data, type, full, meta) {
+        
+        return ('<div class="col-md-12 dChartCpT tooltipM"><span id="spanLargestProfitTrade" ><i class="far fa-clock"></i></span><div id="spanLargestProfitTradeTooltip"><ul><li><b>Open Time</b> : <span id="alptTicket">'+full.OpenTime+'</span></li><li><b>Close Time</b> : <span id="alptTicket">'+full.CloseTime+'</span></li></ul></div></div>');
+        }
+      },
+      { data: "Symbol"
+      },
+      { data: "Profit",
+        render: function (d) {
+          if (d > 0) {
+            return `<span class="badge light badge-success">WON</span>&nbsp;&nbsp;+${d}`;
+          } else {
+            return `<span class="badge light badge-danger">Loss </span>&nbsp;&nbsp;${d}`;
           }
         },
       },
@@ -602,7 +665,7 @@ function getJournalTableGroup() {
           if (d > 0) {
             return `<span class="badge light badge-success">WON</span>&nbsp;&nbsp;+${d}`;
           } else {
-            return `<span class="badge light badge-info">Loss </span>&nbsp;&nbsp;${d}`;
+            return `<span class="badge light badge-danger">Loss </span>&nbsp;&nbsp;${d}`;
           }
         },
       },
@@ -620,10 +683,6 @@ function getJournalTableGroup() {
     },
     ],
   });
-}
-
-function getGroupJournalModal(tick, gid){
-
 }
 
 function getExpandData(curr_obj, journal_group_id, curr_ticket){
@@ -646,7 +705,7 @@ function getExpandData(curr_obj, journal_group_id, curr_ticket){
                 if(data.Profit>0){
                   var single_res = '<span class="badge light badge-success">WON</span>&nbsp;&nbsp;+'+ data.Profit;
                 }else{
-                  var single_res = '<span class="badge light badge-info">Loss </span>&nbsp;&nbsp;'+data.Profit;
+                  var single_res = '<span class="badge light badge-danger">Loss </span>&nbsp;&nbsp;'+data.Profit;
                 }
                 $('<tr role="row" class="odd journal-grouped-item-extra"><td class="sorting_1"></td><td><div class="col-md-12 dChartCpT tooltipM"><span id="spanLargestProfitTrade"><i class="far fa-clock"></i></span><div id="spanLargestProfitTradeTooltip"><ul><li><b>Open Time</b> : <span id="alptTicket">'+data.OpenTime+'</span></li><li><b>Close Time</b> : <span id="alptTicket">'+data.CloseTime+'</span></li></ul></div></div></td><td>'+data.Symbol+'</td><td>'+single_res+'</td><td>'+data.StrategyUsed+'</td><td>'+data.ReasonForEntry+'</td><td>'+data.ReasonForOutcome+'</td><td>'+data.HowICanImprove+'</td><td></td></tr>').insertAfter($(curr_obj).closest('tr'));
               });
@@ -682,7 +741,7 @@ $('#reload').click(
 
 var getAccountReason = function(){
     $.ajax({
-      url: "getAccountReason",
+      url: BASE_URL + "summary/getAccountReason",
       method: "POST",
       data: {
         account_id: _account_id
@@ -702,7 +761,7 @@ var getAccountReason = function(){
         }else{
         var single_rfen = d.valuess;
         }
-            $("#listReasonForEntry").append(
+            $("#listReasonForEntry1").append(
               `<option value="${d.valuess}" title="${single_rfen}">${single_rfen}</option>`
             );
           });
@@ -734,7 +793,7 @@ var getAccountReason = function(){
         var single_rfo = d.valuess;
         }
         
-            $("#listReasonForOutcome").append(
+            $("#listReasonForOutcome1").append(
               `<option value="${d.valuess}" title="${single_rfo}">${single_rfo}</option>`
             );
           });
@@ -744,7 +803,7 @@ var getAccountReason = function(){
           );
   
           improve_reason.map((d) => {
-            $("#listHowICanImprove").append(
+            $("#listHowICanImprove1").append(
               `<option value="${d.valuess}">${d.valuess}</option>`
             );
           });
@@ -760,7 +819,7 @@ var getAccountReason = function(){
         }else{
         var single_sused = d.valuess;
         }
-            $("#listStrategyUsed").append(
+            $("#listStrategyUsed1").append(
               `<option value="${d.valuess}" title="${d.valuess}">${single_sused}</option>`
             );
           });

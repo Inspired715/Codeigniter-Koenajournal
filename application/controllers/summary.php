@@ -61,6 +61,24 @@ class Summary extends MY_Controller {
 		echo json_encode(array('status' => 'success', 'data' => $result));
 	}
 
+	public function getJournalTableAllFilter(){
+		$account_id = isset($_POST['account_id']) ? $_POST['account_id'] : NULL;
+		$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : NULL;
+		$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : NULL;
+
+		$result = $this->Summary_model->getJournalTableAllFilter($account_id, $start_date, $end_date);
+
+		echo json_encode(array('status' => 'success', 'data' => $result));
+	}
+
+	public function getJournalGroupedTickets() {
+		$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : NULL;
+
+		$result = $this->Summary_model->getJournalGroupedTickets($group_id);
+
+		echo json_encode(array('status' => 'success', 'data' => $result));
+	}
+
 	public function getJournalTableGroup(){
 		$account_id = isset($_POST['account_id']) ? $_POST['account_id'] : NULL;
 
@@ -83,6 +101,14 @@ class Summary extends MY_Controller {
 		$plan_id = isset($_POST['account_id']) ? $_POST['account_id'] : NULL;;
 
 		$result = $this->Summary_model->getAccountHistory($account_id, $plan_id);
+
+		echo json_encode(array('status' => 'success', 'data' => $result));
+	}
+
+	public function getAccountDetailsModal() {
+		$ticket_id = isset($_POST['ticket_id']) ? $_POST['ticket_id'] : NULL;
+
+		$result = $this->Summary_model->getAccountDetailsModal($ticket_id);
 
 		echo json_encode(array('status' => 'success', 'data' => $result));
 	}
@@ -138,6 +164,15 @@ class Summary extends MY_Controller {
 		echo json_encode(array('status' => 'success', 'data' => $result));
 	}
 
+	public function deleteSSTimeframe1(){
+		$timeframe = isset($_POST['timeframe']) ? $_POST['timeframe'] : NULL;
+		$ticket_id = isset($_POST['ticket_id']) ? $_POST['ticket_id'] : NULL;
+
+		$result = $this->Summary_model->deleteSSTimeframe1($timeframe, $ticket_id);
+
+		echo json_encode(array('status' => 'success', 'data' => $result));
+	}
+
 	public function SSTimeFrameReload() {
 		$field = isset($_POST['field']) ? $_POST['field'] : NULL;
 		$ticket_id = isset($_POST['ticket_id']) ? $_POST['ticket_id'] : NULL;
@@ -168,5 +203,19 @@ class Summary extends MY_Controller {
 		$result = $this->Summary_model->journalDetailsModalInsertUpdate($data);
 		echo json_encode(array('status' => 'success', 'data' => $result));
 
+	}
+
+	public function accountDetailsModalInsertUpdate() {
+		$data = $_POST;
+
+		$result = $this->Summary_model->accountDetailsModalInsertUpdate($data);
+		echo json_encode(array('status' => 'success', 'data' => $result));
+	}
+
+	public function addNewReason() {
+		$data = $_POST;
+
+		$result = $this->Summary_model->addNewReason($data);
+		echo json_encode(array('status' => 'success', 'data' => $result));
 	}
 }

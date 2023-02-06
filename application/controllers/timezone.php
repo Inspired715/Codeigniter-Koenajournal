@@ -50,5 +50,13 @@ class Timezone extends MY_Controller {
 
 		echo json_encode(array('data' => $table, 'status' => 'success' ));
 	}
+
+	public function spTimezoneSession() {
+		$data = $_POST;
+
+		$res = $this->Timezone_model->spTimezoneSession($data);
+
+		echo json_encode(array('data' => $res, 'status' => 'success' ));
+	}
 }
 	

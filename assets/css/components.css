@@ -548,6 +548,7 @@ div.dataTables_wrapper div.dataTables_processing {
 .fc-day-grid-event .fc-content {
   padding: 5px 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+  text-align: center;
 }
 
 tr:first-child > td > .fc-day-grid-event {

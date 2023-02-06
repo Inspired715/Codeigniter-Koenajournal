@@ -126,3 +126,119 @@
 .textbox-wrapper{
     margin-top:15px;
 }
+
+.card-chart {
+  height: 95%;
+}
+
+.row-chart {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  min-height: 450px;
+}
+
+.sect_td {
+  border-radius: 14px 14px 0 0px;
+  background: #0046bf !important;
+  text-align: center !important;
+  font-size: 16 !important;
+  font-weight: 600 !important;
+  border-bottom: 0rem solid #EEEEEE;
+  text-transform: capitalize;
+  color: #fff !important;
+  font-size: 1rem;
+  
+  font-weight: 500;
+  letter-spacing: 0.0313rem;
+  border-color: #D5DFE7 !important;
+  text-align: center !important;
+  position: relative;
+}
+
+.sect1_td {
+  background: #0046bf !important;
+  color: #fff !important;
+  white-space: nowrap;
+}
+
+.groupJournalBtn.hide {
+  display: none;
+}
+
+/* .modalOpenJournal {
+  display: none;
+} */
+
+.sect_td:after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  height: 15px;
+  background: #0046bf;
+  transform: rotate(45deg);
+  margin: auto;
+  display: block;
+  text-align: center;
+  left: 0;
+  top: 50px;
+  right: 0;
+  z-index: 1;
+}
+
+.table-responsive-sm {
+  min-width: 30rem !important;
+}
+
+.table-bordered > :not(caption) > * > * {
+  border-width: 0 1px;
+}
+
+.sect_td2 {
+  border-radius: 0px 0 14px 14px;
+  padding: 10px;
+  text-align: center;
+  font-size: 20px;
+  color: #000 !important;
+  font-weight: 600;
+  background-color: #f2f2f2;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: rgba(0, 0, 0, 0.05);
+  color: var(--bs-table-striped-color);
+}
+
+.sel-li {
+  width: 100%;
+  display: inline-flex;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.md-form-group-is-filled-account {
+  display: inline-flex;
+}
+
+.reasonAdd {
+  font-size: 30px;
+  padding-left: 15px;
+  padding-top: 16px;
+}
+
+
+/* .table thead th {
+  border-bottom: 0rem solid #EEEEEE;
+  text-transform: capitalize;
+  color: #fff;
+  font-size: 1rem;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.0313rem;
+  border-color: #D5DFE7 !important;
+  text-align: center !important;
+  position: relative;
+} */

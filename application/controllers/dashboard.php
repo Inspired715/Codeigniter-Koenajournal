@@ -51,7 +51,7 @@ class Dashboard extends MY_Controller {
 		$acct = isset($_POST['account_id']) ? $_POST['account_id'] : NULL;
 
 		$account = $this->Dashboard_model->loadCalendarUpper($acct);
-
+		
 		echo json_encode(array('status' => "success", "data" => $account));
 	}
 
@@ -105,6 +105,8 @@ class Dashboard extends MY_Controller {
 
 	public function getSymbolCharts() {
 		$acct = isset($_POST['account_id']) ? $_POST['account_id'] : NULL;
+		// $filter_type = isset($_POST['filter_type']) ? $_POST['filter_type'] : NULL;
+
 		$result = $this->Dashboard_model->getSymbolCharts($acct);
 
 		echo json_encode($result);

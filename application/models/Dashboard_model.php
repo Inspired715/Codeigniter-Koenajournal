@@ -153,14 +153,9 @@ class Dashboard_model extends CI_Model {
             ORDER BY strength DESC";
         $query = $this->db->query($sql);
 
-        // if ($data['symbols']) {
-        //     $cond .= " AND `Symbol` IN('". implode("','", str_getcsv($data['symbols'])) ."')";
-        // }
-
         
         $res = $query->result();
-
-        return $res;
+        return array('status' => "success", 'data' => $res);
     }
 
     public function getSymbolChartsFilter($acct, $filterType, $period) {

@@ -125,66 +125,135 @@ function reloadCalTransactionData(date) {
 }
 
 $('#calendar_c').fullCalendar({
+
+
     events: function(start, end, timezone, callback) {
-        jQuery.ajax({
-            url: BASE_URL + '/dashboard/loadCalendarUpper',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                account_id: _account_id
-            },
-            success: function(response) {
-                var events = [];
-                response['data'].map((d)=>{
-                var backgroundColor = 'rgba(200,200,100,.2)';
+        var calendarEl = document.getElementById('calendar_c');
+        if(calendarEl) {
 
-                if (d.profit>0) {
-                  backgroundColor = 'rgba(0,100,0,.7)';
-                  d.profit = '+' + d.profit;
-                }
+          jQuery.ajax({
+              url: BASE_URL + '/dashboard/loadCalendarUpper',
+              type: 'POST',
+              dataType: 'json',
+              data: {
+                  account_id: _account_id
+              },
+              success: function(response) {
+                  var response = response['data'];
+                  // console.log(response);
+                  var datadb=[];
+                  var totalProfit = response;
+                  var events = [];
+                  response.map((d)=>{
+                    var backgroundColor = 'rgba(200,200,100,.2)';
 
-                if (d.profit<0) {
-                  backgroundColor = 'rgba(255,0,0,.5)';
-                }
-                
-                var datadb = [];
+                    if (d.profit>0) {
+                     backgroundColor = 'rgba(0,100,0,.7)';
+                    d.profit = '+' + d.profit;
+                    }
 
-                datadb.push({
-                  allDay: 'true',
-                  title: d.profit,
-                  start: d.day,
-                  backgroundColor: backgroundColor,
-                  textColor: 'white',
-                  borderColor: 'transparent',
-                  classNames: ['profit', d.class]   
-                }); 
+                    if (d.profit<0) {
+                      backgroundColor = 'rgba(255,0,0,.5)';
+                    }
+                  
+                    datadb.push({
+                      allDay: 'true',
+                      title: d.profit,
+                      start: d.day,
+                      backgroundColor: backgroundColor,
+                      textColor: 'white',
+                      borderColor: 'transparent',
+                      classNames: ['profit', d.class]   
+                    });
+
+                });
+                  
                 callback(datadb);
-            });
 
-            var current_month_total = 0;
-            setTimeout(function() { 
-              $('.fc-event-container .fc-content .fc-title').each(function(){
-                var current_event_price = $(this).html();
-                if(!$(this).parent().parent().parent().parent().parent().parent().parent().parent().hasClass('fc-day-other')){
-                  current_month_total = current_month_total+parseFloat(current_event_price);
-                    document.getElementById('total-profit').innerHTML = current_month_total;
-                }
-              })
-              if (Number(current_month_total).toFixed(2) > 0) {
-                $('.month-cal-total-bal').html("Monthly Profit: <span class='badge badge-success as'> "+Number(current_month_total).toFixed(2))+"</span>";
-                } else {
-                $('.month-cal-total-bal').html("Monthly Profit: <span class='badge badge-danger as'>"+Number(current_month_total).toFixed(2))+"</span>";
-                }
-              
-            },100);
-          } 
-        });
+              var current_month_total = 0;
+              setTimeout(function() { 
+                $('.fc-event-container .fc-content .fc-title').each(function(){
+                  var current_event_price = $(this).html();
+                  if(!$(this).parent().parent().parent().parent().parent().parent().parent().parent().hasClass('fc-day-other')){
+                    current_month_total = current_month_total+parseFloat(current_event_price);
+                      document.getElementById('total-profit').innerHTML = current_month_total;
+                  }
+                })
+                if (Number(current_month_total).toFixed(2) > 0) {
+                  $('.month-cal-total-bal').html("Monthly Profit: <span class='badge badge-success as'> "+Number(current_month_total).toFixed(2))+"</span>";
+                  } else {
+                  $('.month-cal-total-bal').html("Monthly Profit: <span class='badge badge-danger as'>"+Number(current_month_total).toFixed(2))+"</span>";
+                  }
+                
+              },100);
+            } 
+          });
+        }
       },
       eventClick: function(info) {
         reloadCalTransactionData(info.start._i);
         $('#cal_event_modal').modal();
       }
   });
+
+$('#accountDetailsModalInsertUpdate').on('submit', function (event) {
+    event.preventDefault();
+    var account_id = _account_id;
+    var user_email = $("#jEmail").val();
+    
+    var has = $("#jHas").val();
+
+    var reasonForOutcome = $("#listReasonForOutcome2").val();
+    var howICanImprove = $("#listHowICanImprove2").val();
+    var strategyUsed = $("#listStrategyUsed2").val();
+    var reasonForEntry = $("#listReasonForEntry2").val();
+    var reasonForExit = $("#listReasonForExit2").val();
+
+    var tickets = $('#JournalSummaryGridGrpValue').val();
+
+    var TimeFrame1 = $("#TimeFrame11").val();
+    var TimeFrame2 = $("#TimeFrame21").val();
+    var TimeFrame3 = $("#TimeFrame31").val();
+
+    $.ajax({
+        url: BASE_URL + "summary/accountDetailsModalInsertUpdate",
+        method: "POST",
+        async: false,
+        data: {
+            user_email: user_email,
+            account_id: account_id,
+            tickets: tickets,
+
+            reasonForOutcome: reasonForOutcome,
+            howICanImprove: howICanImprove,
+            strategyUsed: strategyUsed,
+            reasonForEntry: reasonForEntry,
+            reasonForExit: reasonForExit,
+
+            TimeFrame1: TimeFrame1,
+            TimeFrame2: TimeFrame2,
+            TimeFrame3, TimeFrame3,
+
+            has: has,
+        },
+
+        success: function (response) {
+        response = JSON.parse(response);
+        if (response["status"] == "success") {
+            var arr = (tickets).toString().split(',');
+            $.each(arr, function(i) {
+                $('#'+ arr[i]).removeClass('btn-danger').addClass('btn-success');  
+                })
+            
+            $('#modalOpenJournal').modal('hide');
+            // notifyme.showNotification(response["status"], response["message"]);
+            $('#accountDetailsModalInsertUpdate').trigger("reset");
+            } else {
+                // notifyme.showNotification(response["status"], response["message"]);
+            }
+        }
+    })
+});
 
 $('#journalDetailsModalInsertUpdate').on("submit", function (event) {
   event.preventDefault();
@@ -196,7 +265,7 @@ $('#journalDetailsModalInsertUpdate').on("submit", function (event) {
   var reasonForExit = $("#listReasonForExit").val();
 
   var reasonForOutcome = $("#textBoxReasonForOutcome").val();
-  var howICanImprove = $("#listHowICanImprove").val();
+  var howICanImprove = $("#listHowICanImprove1").val();
   var strategyUsed = $("#textBoxStrategyUsed").val();
   var reasonForEntry = $("#textBoxReasonForEntry").val();
 
@@ -234,7 +303,7 @@ $('#journalDetailsModalInsertUpdate').on("submit", function (event) {
       if (response["status"] == "success") {
           var arr = (tickets).toString().split(',');
           
-          $('#modalOpenJournal').modal('hide');
+          $('#trade_journal_modal').modal('hide');
           // notifyme.showNotification(response["status"], response["message"]);
           $('#JournalSummaryGrid').DataTable().ajax.reload();
           } else {
