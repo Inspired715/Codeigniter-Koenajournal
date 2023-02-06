@@ -156,7 +156,7 @@
         <h3><i class="ion-social-chrome"></i>&nbsp;Insights</h3>
       </div>
       <div class="card-body">
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow: inherit;">
           <table class="table table-bordered table-striped verticle-middle table-responsive-sm" id="general_insight_list">
             <thead>                                 
               <th class="sect_td">Average Hold Time</th>

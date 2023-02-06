@@ -103,6 +103,7 @@ function getAccountHistory() {
 }
 
 function modalAccountDetailShow(ticket_id, account_id) {
+  
   $('#JournalSummaryGridGrpValue').val(ticket_id);
   getAccountDetailsModal(ticket_id);
   }      
@@ -642,9 +643,10 @@ function filterJournalSummary(el) {
     $('#JournalSummaryGrid').find('.modalOpenJournal').show(300);
   }
   var tickets = switchSummaryGrp(el);
-  $('#JournalSummaryGridGrpValue').val(tickets);
-  console.log($('#JournalSummaryGridGrpValue').val(tickets)[0].value);
-  if ($('#JournalSummaryGridGrpValue').val(tickets)[0].value==''){
+  var tick_list = tickets.toString();
+  $('#JournalSummaryGridGrpValue1').val(tick_list);
+  $('#JournalSummaryGridGrpValue').val(tick_list);
+  if ($('#JournalSummaryGridGrpValue').val(tick_list)[0].value==''){
     $('#JournalSummaryGridGrpJournalBtn').hide();
   } else {
     $('#JournalSummaryGridGrpJournalBtn').show();
