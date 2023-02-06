@@ -403,7 +403,7 @@
                                         </p>
                                     </div>
                                     <div class="col-md-5 mr-auto">
-                                        <form id="registerForm" role="form">
+                                        <form id="registerForm"  role="form">
                                             <div class="form-group has-default md-form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -499,7 +499,8 @@
     <script src="assets/js/plugins/bootstrap-selectpicker.js"></script>
     <script src="assets/js/app/notifyme.js"></script>-->
 
-    <script src="<?php echo base_url('assets/modules/jquery.min.js')?>"></script>
+  <script src="<?php echo base_url('assets/js/page/register.js')?>"></script>
+  <script src="<?php echo base_url('assets/modules/jquery.min.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/popper.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/tooltip.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/bootstrap/js/bootstrap.min.js')?>"></script>
@@ -512,10 +513,11 @@
   <!-- Page Specific JS File -->
   
   <!-- Template JS File -->
+
   <script src="<?php echo base_url('assets/js/scripts.js')?>"></script>
   <script src="<?php echo base_url('assets/js/custom.js')?>"></script>
 
-  <script src="<?php echo base_url('assets/js/page/register.js')?>"></script>
+ 
 <style>
 .filter-option-inner-inner{color: #000000 !important;}
 .register-country, .register-timezone{width:280px !important;}

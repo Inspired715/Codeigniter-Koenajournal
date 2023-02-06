@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-12">
     <div class="card author-box card-primary">
       <div class="card-body">
@@ -47,8 +47,9 @@
             </div>
           </div>
         </div>
+        <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary">Edit your Avatar</button>
       </div>
-      <button type="button" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary">Edit your Avatar</button>
+     
     </div>
   </div>
 </div>
@@ -204,4 +205,4 @@
   </div>
 </div>
 
-<script src="<?php echo base_url('assets/js/page/profile.js')?>"></script>
+<script src="<?php echo base_url('assets/js/page/profile.js')?>"></script> -->

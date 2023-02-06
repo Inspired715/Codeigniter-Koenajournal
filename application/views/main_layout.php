@@ -44,9 +44,9 @@
       e.preventDefault();
       var formData = new FormData(this);
       var callback = $(this).attr('callback');
-
+      var url  = $(this).attr('action');
       $.ajax({
-        url: BASE_URL + "/summary/changeSSTimeframe",
+        url: BASE_URL + url,
         type: "POST",
         data: formData,
         cache: false,
@@ -335,13 +335,20 @@
                 <div class="card">
                   <div class="row" style="padding:30px">
                       <div class="col-12" style="display:flex">
-                        <div class="col-1">
-                          <img width="100%" style="border-radius:100px; background: #eee" onclick="$('#upload-ava').click();"/>
+                        <div class="col-2">
+                          <img
+                          alt="image"
+                          width="100%"
+                          height="100%"
+                          src="<?php echo $_SESSION['avatar']?>"
+                          class="rounded-circle author-box-picture"
+                          />
+                        <div class='ava-icon' onclick="$('#upload-ava').click();"><i class="material-icons">photo_camera</i></div>
                         </div>
                         <div class="col-5" style="display:inline; margin:auto 10px auto 10px">
-                          User Profile
+
                         </div>
-                        <div class="col-7">
+                        <div class="col-6">
                           <p style="font-size:16px; font-weight:bold; display: block; margin: 5px"><?=$_SESSION['email']?></p>
                           <p style="font-size:14px; display: block; margin: 5px"><?=$_SESSION['username']?></p>
                           <p style="font-size:14px; display: block; margin: 5px"><?=$_SESSION['email']?></p>
@@ -554,14 +561,7 @@
             </li>
             <li class="menu-header">Session</li>
             <li data-selection="session" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('timezone/') ?>"><i class="far fa-square"></i> <span>Sessions</span></a></li>
-            <li class="menu-header">Personal</li>
-            <li class="dropdown nav-side-bar" data-selection="user">
-              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>User</span></a>
-              <ul class="dropdown-menu">
-                <li data-selection="profile" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('profile') ?>">Profile</a></li>
-                <li data-selection="plan" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('profile/plan') ?>">Plan</a></li>
-              </ul>
-            </li>
+            <li data-selection="session" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('profile/') ?>"><i class="fas fa-columns"></i> <span>User</span></a></li>
           </ul>
        </aside>
        <script>

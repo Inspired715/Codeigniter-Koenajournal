@@ -10,8 +10,9 @@ class Dashboard extends MY_Controller {
 	}
 
 	public function index(){
-		if($_SESSION['usertype_id']  > 1)
+		if ($_SESSION['usertype_id'] > 1) {
 			redirect("/dashboard/general");
+		}
 		if (isset($_GET['ac'])){
 			$_SESSION['account_id'] = $_GET['ac'];
 		};

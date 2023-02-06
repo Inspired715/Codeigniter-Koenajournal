@@ -9,41 +9,24 @@ class Profile extends MY_Controller {
 		$this->load->model("Profile_model");
 	}
 
-	public function plan(){
-
-		if (isset($_GET['ac'])){
-			$_SESSION['account_id'] = $_GET['ac'];
-		};
-
-		$planlist = $this->Profile_model->getUserAccounts1();
-
-		$params = array(
-			'title' => "Plan",
-			'selections' => json_encode(array("user", "plan")),
-			'data' => array(
-				'planlist' => $planlist
-			)
-		);
-		
-		$this->load_view('profile/plan_view.php', $params);
-	}
-
 	public function index(){
 		if (isset($_GET['ac'])){
 			$_SESSION['account_id'] = $_GET['ac'];
 		};
-
+		$planlist = $this->Profile_model->getPlans();
 		$params = array(
 			'title' => "Profile",
-			'selections' => json_encode(array("user", "profile"))
+			'selections' => json_encode(array("user", "profile")),
+			'data' => array(
+				'planlist' => $planlist
+			)
 		);
-		
-		$this->load_view('profile/profile_view.php', $params);
+		$this->load_view('profile/account-listing_view.php',$params);
 	}
 
     public function getUserAccountList() {
-
 		$account = $this->Profile_model->getUserAccountList();
+		
 		echo json_encode(array('status' => "success", "data" => $account));
 	}
 
@@ -55,9 +38,8 @@ class Profile extends MY_Controller {
 		echo json_encode(array('status' => "success", "data" => $account));
 	}
 
-	public function getUserAccounts1() {
-
-		$account = $this->Profile_model->getUserAccounts1();
+	public function getUserAccounts() {
+		$account = $this->Profile_model->getUserAccountList();
 		echo json_encode(array('status' => "success", "data" => $account));
 	}
 
@@ -96,7 +78,7 @@ class Profile extends MY_Controller {
 			$_SESSION['account_id'] = $_GET['ac'];
 		};
 
-		$planlist = $this->Profile_model->getUserAccounts1();
+		$planlist = $this->Profile_model->getPlans();
 
 		$params = array(
 			'title' => "Profile",
@@ -105,8 +87,7 @@ class Profile extends MY_Controller {
 				'planlist' => $planlist
 			)
 		);
-		
-		$this->load_view('profile/profile_view.php', $params);
+		$this->load_view('profile/account-listing_view.php', $params);
 	}
 
 	public function updateUserProfile() {
@@ -126,4 +107,64 @@ class Profile extends MY_Controller {
 
 		echo json_encode(array('status' => 'success'));
 	}
+
+
+	public function getPlans()
+    {
+		if (isset($_GET['ac'])){
+			$_SESSION['account_id'] = $_GET['ac'];
+		};
+
+		$planlist = $this->Profile_model->getUserAccounts1();
+
+		$params = array(
+			'title' => "Plan",
+			'selections' => json_encode(array("user", "plan")),
+			'data' => array(
+				'planlist' => $planlist
+			)
+		);
+		$this->Profile_model->getPlans();
+        $result = $this->query("select * from user_plan");
+        return $result;
+    }
+
+	public function changeAvatar()
+    {
+		$result = $this->Profile_model->changeAvatar($_POST);
+		echo json_encode($result);
+        
+    }
+
+
+	//////////////email change bt
+	public function resetPasswordReset($data) {
+
+		$params = isset($_POST)?$_POST:NULL;
+        $res = $this->Profile_model->resetPasswordReset($params);
+        if( $res){
+        	echo json_encode(array('status' => "success", "message" => 'Email send successfully to verify email. Please check your email.!'));	
+        }else if($res == 3){
+        	echo json_encode(array('status' => "error", "message" => 'No user found with this email address. Please enter another email address.'));	
+        }else{
+        	echo json_encode(array('status' => "error", "message" => 'An error occured while sending email. Please Try again later!'));	
+        }
+	}
+
+	public function resetEmailReset($data) {
+
+		$params = isset($_POST)?$_POST:NULL;
+        $res = $this->Profile_model->resetPasswordReset($params);
+        if( $res){
+        	echo json_encode(array('status' => "success", "message" => 'Email send successfully to verify email. Please check your email.!'));	
+        }else if($res == 3){
+        	echo json_encode(array('status' => "error", "message" => 'No user found with this email address. Please enter another email address.'));	
+        }else{
+        	echo json_encode(array('status' => "error", "message" => 'An error occured while sending email. Please Try again later!'));	
+        }
+	}
+
 }
+
+
+

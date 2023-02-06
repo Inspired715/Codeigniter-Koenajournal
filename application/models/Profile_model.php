@@ -11,7 +11,7 @@ class Profile_model extends CI_Model {
         } else {
             $query = $this->db->query("SELECT u.*, user_plan.*,uuu.username, uuu.email, us.plan_id, us.end_date, a.is_active,a.broker," .  $isplanupdate . " as is_plan_update, a.BaseGMT FROM user_accounts u inner join trade_summary a on u.account_id=a.acct inner join user uuu on u.user_id=uuu.user_id inner join user_subscription us on us.user_id=uuu.user_id INNER JOIN user_plan ON us.plan_id=user_plan.id WHERE u.user_id = ".$_SESSION['user_id']." GROUP BY u.account_id ORDER BY u.account_id ASC ");
         }
-
+       
         $acct = $query->result();
 
         return $acct;
@@ -52,15 +52,6 @@ class Profile_model extends CI_Model {
     }
 
     // Get User Accounts
-    public function getUserAccounts1()
-    {
-        $isplanupdate = (isset($_SESSION['is_plan_update']) ? $_SESSION['is_plan_update'] : 0);
-        $acct = null;
-        $query = $this->db->query("SELECT u.*, user_plan.*,uuu.username, uuu.email, us.plan_id, us.end_date, a.is_active,a.broker," .  $isplanupdate . " as is_plan_update, a.BaseGMT FROM user_accounts u inner join trade_summary a on u.account_id=a.acct inner join user uuu on u.user_id=uuu.user_id inner join user_subscription us on us.user_id=uuu.user_id INNER JOIN user_plan ON us.plan_id=user_plan.id WHERE u.account_id = ".$_SESSION['account_id']." GROUP BY u.account_id ORDER BY u.account_id ASC ");
-        
-        $acct = $query->result();
-        return $acct;
-    }
 
     public function delectAccount($account_id){
 
@@ -97,30 +88,29 @@ class Profile_model extends CI_Model {
 
     public function addAccount($account_id)
     {
-        $query = $this->db->query("SELECT count(*) as accounts_count FROM user_accounts WHERE account_id=".$account_id."");
+        $query = $this->db->query("SELECT count(*) as accounts_count FROM user_accounts WHERE account_id='".$account_id."' ");
         $user_accounts_already = $query->result();
-
         if ($user_accounts_already[0]->accounts_count > 0) {
+            
             return array('status' => 'error', 'message' => 'This account No already exists in your user or another user.');
         }
-
-        $query = $this->db->query("SELECT * from user_plan WHERE id=".$_SESSION['plan_id']."");
+        $query = $this->db->query("SELECT * from user_plan WHERE id='".$_SESSION['plan_id']."' ");
         $plan_details = $query->result();
 
-        $query = $this->db->query("SELECT count(*) as accounts_count FROM user_accounts u inner join trade_summary a on u.account_id=a.acct  WHERE u.user_id = ".$_SESSION['user_id']." and a.is_active=1");
+        $query = $this->db->query("SELECT count(*) as accounts_count FROM user_accounts u inner join trade_summary a on u.account_id=a.acct  WHERE u.user_id = '".$_SESSION['user_id']."' and a.is_active=1");
         $user_accounts = $query->result();
-
+        
         if ($user_accounts[0]->accounts_count >= $plan_details[0]->noofaccounts) {
             return array('status' => 'error', 'message' => 'Cannot add account, you have reached your plan limit, you are only allowed to add ' . $plan_details["noofaccounts"] . ' accounts.');
         } else {
             $date = date('Y-m-d h:i:s');
             $is_default = 0;
             $is_active = 0;
-            $query = $this->db->query("INSERT INTO `user_accounts`(`user_id`, `account_id`,`is_default`,`created_date`) VALUES (".$_SESSION['user_id'].",".$account_id.",".$is_default.", '".$date."')");
-
+            $query = $this->db->query("INSERT INTO `user_accounts`(`user_id`, `account_id`,`is_default`,`created_date`) VALUES ('".$_SESSION['user_id']."','".$account_id."','".$is_default."', '".$date."')");
+           
             if ($query <= 0) return array('status' => 'error', 'message' => 'An error occured while adding account. Please Try again later!');
 
-            $query = $this->db->query("INSERT INTO `trade_summary`(`acct`, `accountid`,`is_active`) VALUES ($account_id,$account_id,".$is_active.")");
+            $query = $this->db->query("INSERT INTO `trade_summary`(`acct`, `accountid`,`is_active`) VALUES ('".$account_id."','".$account_id."','".$is_active."')");
 
             if ($query <= 0) return array('status' => 'error', 'message' => 'An error occured while adding account. Please Try again later!');
 
@@ -173,4 +163,90 @@ class Profile_model extends CI_Model {
 		$_SESSION['zipcode'] = $data['zipcode'];
         return 1;
 	}
+
+    public function getPlans() {
+        $query = $this->db->query("select * from user_plan");
+
+        return $query->result();
+	}
+
+    public function changeAvatar($data){
+        
+        $user_id = $data['user_id'];
+        if (isset($_FILES["image"])) {
+            $thumb = resizer($_FILES['image']['tmp_name'], 256, 256, true);
+            ob_start();
+            imagejpeg($thumb);
+            $image = ob_get_clean();
+            $imgContent = addslashes($imageData = "data:image/jpg;charset=utf8;base64,".base64_encode($image)); 
+            
+            // Insert image content into database 
+            $this->db->query("UPDATE user SET `avatar`='.$imgContent.' WHERE `user_id`='".$user_id."'");
+        } else {
+            return array('status' => 'error', 'message' => 'ERROR');
+        }
+        $_SESSION['avatar'] = $imageData;
+        return array('status' => 'success', 'message' => 'Changed successfully!');
+    }
+
+
+
+    public function resetPasswordReset($data){
+        $active_code=md5(uniqid(rand(5, 15), true));
+        $changepwdtoken = $data['changepwdtoken'];
+        $ispwdchange = $data['ispwdchange'];
+        $user_id = $data['user_id'];
+		$link = 'http://154.44.150.137/reset-password.php?key='.$active_code;
+
+		$query = $this->db->query("UPDATE user SET `changepwdtoken` = '".$changepwdtoken."', ispwdchange='".$ispwdchange."' WHERE user_id = '".$user_id."'");
+		
+		if ($query) return 0;
+
+		//send email
+		$to = $_SESSION['email']; //change to ur mail address
+		$strSubject="Koena Tech | Password Recovery Link";
+		$message = 'Hi
+' ;              
+        $message .= 'Thanks for signing up to the Koena Journal.
+' ; 
+$message .= 'Click on the link to activate your account '.$link.'
+' ;     
+        $this->email->from('email@example.com', 'Identification');
+        $this->email->to($to);
+        $this->email->subject($strSubject);
+        $this->email->message($message);
+        if($this->email->send())
+            return 1;
+        else
+            return 0;
+            }
+        public function resetEmailReset($data){
+            $active_code=md5(uniqid(rand(5, 15), true));
+            $emailchangetoken = $data['emailchangetoken'];
+            $isemailchanged = $data['isemailchanged'];
+            $user_id = $data['user_id'];
+            $link = 'http://154.44.150.137/reset-email.php?key='.$active_code;
+    
+            $query = $this->db->query("UPDATE user SET `emailchangetoken` = '".$emailchangetoken."', isemailchanged='".$isemailchanged."' WHERE user_id = '".$user_id."'");
+            
+            if ($query) return 0;
+    
+            //send email
+            $to = $_SESSION['email']; //change to ur mail address
+            $strSubject="Koena Tech | Email Recovery Link";
+            $message = 'Hi
+    ' ;              
+            $message .= 'Thanks for signing up to the Koena Journal.
+    ' ; 
+    $message .= 'Click on the link to activate your account '.$link.'
+    ' ;     
+            $this->email->from('email@example.com', 'Identification');
+            $this->email->to($to);
+            $this->email->subject($strSubject);
+            $this->email->message($message);
+            if($this->email->send())
+                return 1;
+            else
+                return 0;
+                }
 }
