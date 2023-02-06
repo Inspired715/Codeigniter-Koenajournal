@@ -6,7 +6,7 @@
         <div id='JournalSummaryGridGrpBtn' class='groupJournalBtn hide'>
             <a id='JournalSummaryGridGrpJournalBtn' class="modalOpenJournal btn btn-success" href="javascript:void(0)" onclick="getGroupJournalModal();"><i class="ion-ios-paper-outline"></i>&nbsp;Group Journal</a>
             <a class="badge badge-danger" href="javascript:void(0)" rel="JournalSummaryGrid" onclick="clearfilterJournalSummary(this);"><i class="ion-reply-all"></i>&nbsp;Clear</a>
-            <input id="JournalSummaryGridGrpValue" type="text" class='form-control colorGreen' value=''>
+            <input id="JournalSummaryGridGrpValue1" type="text" class='form-control colorGreen'>
         </div>
         <h6 style="color: lightgreen;">Shown as GMT<?php echo $_SESSION['GMT']?></h6>
         
