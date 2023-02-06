@@ -118,16 +118,16 @@
         <div class="table-responsive">
           <table class="table table-striped" id="admin_dashboard_client_list">
             <thead>                                 
-              <th>Status</th>
-              <th>Avatar</th>
-              <th>Names</th>
-              <th>Email</th>
-              <th>Package</th>
-              <th>Start date</th>
-              <th>End date</th>
-              <th>Accounts</th>
-              <th>Amount</th>
-              <th>Action</th>
+              <th class="sect1_td">Status</th>
+              <th class="sect1_td">Avatar</th>
+              <th class="sect1_td">Names</th>
+              <th class="sect1_td">Email</th>
+              <th class="sect1_td">Package</th>
+              <th class="sect1_td">Start date</th>
+              <th class="sect1_td">End date</th>
+              <th class="sect1_td">Accounts</th>
+              <th class="sect1_td">Amount</th>
+              <th class="sect1_td">Action</th>
             </thead>
             <tbody>
             </tbody>
@@ -197,8 +197,8 @@
         <div class="table-responsive">
           <table class="table table-striped" id="admin_dashboard_payments_list">
             <thead>                                 
-              <th>Payments Methods </th>
-              <th>Amounts</th>
+              <th class="sect1_td">Payments Methods </th>
+              <th class="sect1_td">Amounts</th>
             </thead>
             <tbody>
             <?php foreach ($params['data']['payment_data'] as $key => $item): ?>

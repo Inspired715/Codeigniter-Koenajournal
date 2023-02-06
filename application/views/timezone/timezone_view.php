@@ -54,14 +54,14 @@
                   <span class="badge light badge-danger" id='minProfit' style="cursor:pointer;" onclick="modalBestWorstHrSession('min')"></span> </p>
                 </div>
               </th>
-              <th>Australia Sydney</th>
-              <th>Sydney & Tokyo</th>
-              <th>Asia Tokyo</th>
-              <th>Tokyo & London</th>
-              <th>Europe London</th>
-              <th>London & New York</th>
-              <th>America New York</th>
-              <th>Total</th>
+              <th class="sect1_td">Australia Sydney</th>
+              <th class="sect1_td">Sydney & Tokyo</th>
+              <th class="sect1_td">Asia Tokyo</th>
+              <th class="sect1_td">Tokyo & London</th>
+              <th class="sect1_td">Europe London</th>
+              <th class="sect1_td">London & New York</th>
+              <th class="sect1_td">America New York</th>
+              <th class="sect1_td">Total</th>
             </thead>
             <tbody>
             </tbody>

@@ -1,6 +1,6 @@
-<div class="row">
+<div class="row-chart">
   <div class="col-12 col-md-6 col-lg-8">
-    <div class="card">
+    <div class="card card-chart">
       <div class="card-header" style="display: flex; flex-direction: column; align-items: flex-start;">
         <h3><i class="ion-social-chrome-outline">&nbsp;Strategy Strength</i></h3>
       </div>
@@ -10,8 +10,8 @@
     </div>
   </div>
   <div class="col-12 col-md-6 col-lg-4">
-    <div class="card">
-      <div class="card-header">
+    <div class="card card-chart">
+      <div class="card-header"> 
         <div class="col-md-12" style="display: inline-flex; flex-direction: row; justify-content: space-between;" >
           <div><h4>Trades taken</h4>
             <br/><div id="taken" class="taken-text"></div>
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="col-sm-3 item-align-center">
-            <button class="btn btn-info" onclick="getJournalTable()">Search</button>
+            <button class="btn btn-info" onclick="getJournalTableFilter()">Search</button>
           </div>
         </div>
         <ul class="nav nav-tabs" role="tablist">
@@ -67,14 +67,14 @@
             <div class="table-responsive">
               <table class="table table-striped" id="journal_grid_all" style="width: 100%;">
                 <thead>
-                    <th>Time</th>
-                    <th>Symbol</th>
-                    <th>Outcome</th>
-                    <th>Strategy Used</th>
-                    <th>Reason for Entry</th>
-                    <th>Reason for Outcome</th>
-                    <th>How can I improve</th>
-                    <th>Summary</th>
+                    <th class="sect1_td">Time</th>
+                    <th class="sect1_td">Symbol</th>
+                    <th class="sect1_td">Outcome</th>
+                    <th class="sect1_td">Strategy Used</th>
+                    <th class="sect1_td">Reason for Entry</th>
+                    <th class="sect1_td">Reason for Outcome</th>
+                    <th class="sect1_td">How can I improve</th>
+                    <th class="sect1_td">Summary</th>
                 </thead>
                 <tbody>
                 </tbody>
@@ -85,15 +85,15 @@
             <div class="table-responsive">
               <table class="table table-striped" id="journal_grid_group" style="width: 100%;">
                 <thead>
-                    <th></th>
-                    <th>Time</th>
-                    <th>Symbol</th>
-                    <th>Outcome</th>
-                    <th>Strategy Used</th>
-                    <th>Reason for Entry</th>
-                    <th>Reason for Outcome</th>
-                    <th>How can I improve</th>
-                    <th>Summary</th>
+                    <th class="sect1_td"><i class="fas fa-plus-circle"></i></th>
+                    <th class="sect1_td">Time</th>
+                    <th class="sect1_td">Symbol</th>
+                    <th class="sect1_td">Outcome</th>
+                    <th class="sect1_td">Strategy Used</th>
+                    <th class="sect1_td">Reason for Entry</th>
+                    <th class="sect1_td">Reason for Outcome</th>
+                    <th class="sect1_td">How can I improve</th>
+                    <th class="sect1_td">Summary</th>
                 </thead>
                 <tbody>
                 </tbody>

@@ -3,19 +3,26 @@
     <div class="card">
       <div class="card-header" style="display: flex; justify-content: space-between;">
         <h2><i class="ion-ios-paper">&nbsp;Journal</i></h2>
+        <div id='JournalSummaryGridGrpBtn' class='groupJournalBtn hide'>
+            <a id='JournalSummaryGridGrpJournalBtn' class="modalOpenJournal btn btn-success" href="javascript:void(0)" onclick="getGroupJournalModal();"><i class="ion-ios-paper-outline"></i>&nbsp;Group Journal</a>
+            <a class="badge badge-danger" href="javascript:void(0)" rel="JournalSummaryGrid" onclick="clearfilterJournalSummary(this);"><i class="ion-reply-all"></i>&nbsp;Clear</a>
+            <input id="JournalSummaryGridGrpValue" type="text" class='form-control colorGreen' value=''>
+        </div>
         <h6 style="color: lightgreen;">Shown as GMT<?php echo $_SESSION['GMT']?></h6>
+        
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-striped" id="account_summary_journal">
-            <thead>                       
-              <th>Tickets</th>
-              <th>Open Date</th>
-              <th>Close Date</th>
-              <th>Symbol</th>
-              <th>Type</th>
-              <th>Lots</th>
-              <th>Outcome</th>
+          <table class="table table-striped" id="JournalSummaryGrid">
+            <thead>                   
+              <th class="sect1_td">Tickets</th>
+              <th class="sect1_td">Open Date</th>
+              <th class="sect1_td">Close Date</th>
+              <th class="sect1_td">Symbol</th>
+              <th class="sect1_td">Type</th>
+              <th class="sect1_td">Lots</th>
+              <th class="sect1_td">Outcome</th>
+              <th class="sect1_td">Journal</th>
             </thead>
             <tbody>
             </tbody>
@@ -38,7 +45,7 @@
             </div>
           </div>
           <div class="col-sm-3 item-align-center">
-            <button class="btn btn-info" onclick="rasjt()">Search</button>
+            <button class="btn btn-info" onclick="getAccountSummaryJournalFilter()">Search</button>
           </div>
         </div>
       </div>
@@ -57,18 +64,18 @@
         <div class="table-responsive">
           <table class="table table-striped" id="account_summary_history">
             <thead>                                 
-              <th>Open D/T</th>
-              <th>Close D/T</th>
-              <th>Ticket</th>
-              <th>Symbol</th>
-              <th>Type</th>
-              <th>Entry</th>
-              <th>SL Price</th>
-              <th>TP Price</th>
-              <th>Commission</th>
-              <th>Swap</th>
-              <th>Exit Price</th>
-              <th>Profit</th>
+              <th class="sect1_td">Open D/T</th>
+              <th class="sect1_td">Close D/T</th>
+              <th class="sect1_td">Ticket</th>
+              <th class="sect1_td">Symbol</th>
+              <th class="sect1_td">Type</th>
+              <th class="sect1_td">Entry</th>
+              <th class="sect1_td">SL Price</th>
+              <th class="sect1_td">TP Price</th>
+              <th class="sect1_td">Commission</th>
+              <th class="sect1_td">Swap</th>
+              <th class="sect1_td">Exit Price</th>
+              <th class="sect1_td">Profit</th>
             </thead>
             <tbody>
             </tbody>

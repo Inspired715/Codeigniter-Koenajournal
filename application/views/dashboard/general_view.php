@@ -63,9 +63,10 @@
     </div>
   </div>
 </div>
-<div class="row">
+
+<div class="row-chart">
   <div class="col-12 col-md-6 col-lg-8">
-    <div class="card">
+    <div class="card card-chart">
       <div class="card-header" style="display: flex; flex-direction: column; align-items: flex-start;">
         <h3><i class="ion-social-chrome"></i>&nbsp;Symbols</h3>
         <ul class="nav nav-pills" id="myTab3" role="tablist">
@@ -109,8 +110,8 @@
       </div>
     </div>
   </div>
-  <div class="col-12 col-md-6 col-lg-4">
-    <div class="card">
+  <div class="col-12 col-md-1 col-lg-4" style="width:100%" >
+    <div class="card card-chart">
       <div class="card-header">
         <h4 class="win_rate_chart"></h4>
       </div>
@@ -146,35 +147,7 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-12 col-md-12 col-lg-12">
-    <div class="card">
 
-      <div class="card-header" style="display: flex; flex-direction: column; align-items: flex-start">
-        <h3><i class="ion-social-chrome"></i>&nbsp;Performance Growth</h3>
-        <ul class="nav nav-pills" id="myTab3" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="percentage1" data-toggle="tab" href="#percentage" role="tab" aria-controls="percentage" aria-selected="true">Percentage</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="amount1" data-toggle="tab" href="#amount" role="tab" aria-controls="amount" aria-selected="false">Amount In cash</a>
-        </ul>
-      </div>
-      <div class="tab-content" id="myTabContent1">
-        <div class="tab-pane fade" id="percentage" role="tabpanel">
-          <div class="card-body" >
-            <canvas id="general_percentage_chart"></canvas>
-          </div>
-        </div>
-        <div class="tab-pane fade show active" id="amount" role="tabpanel">
-          <div class="card-body" >
-            <canvas id="general_amount_chart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="row">
   <div class="col-12 col-md-12 col-lg-12">
     <div class="card">
@@ -184,14 +157,14 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-striped" id="general_insight_list">
+          <table class="table table-bordered table-striped verticle-middle table-responsive-sm" id="general_insight_list">
             <thead>                                 
-              <th>Average Hold Time</th>
-              <th>Consecutive Wins</th>
-              <th>Consecutive Loss</th>
-              <th>Average Lost Traded</th>
-              <th>Largest Profit</th>
-              <th>Largest Loss</th>
+              <th class="sect_td">Average Hold Time</th>
+              <th class="sect_td">Consecutive Wins</th>
+              <th class="sect_td">Consecutive Loss</th>
+              <th class="sect_td">Average Lost Traded</th>
+              <th class="sect_td">Largest Profit</th>
+              <th class="sect_td">Largest Loss</th>
             </thead>
             <tbody>
             </tbody>
@@ -201,6 +174,8 @@
     </div>
   </div>
 </div>
+
+
 <div class="row">
   <div class="col-12 col-md-10 col-lg-12">
     <div class="card">
@@ -251,7 +226,38 @@
       </div>
     </div>
   </div>
+  <div class="row">
+  <div class="col-12 col-md-12 col-lg-125">
+    <div class="card">
+
+      <div class="card-header" style="display: flex; flex-direction: column; align-items: flex-start">
+        <h3><i class="ion-social-chrome"></i>&nbsp;Performance Growth</h3>
+        <ul class="nav nav-pills" id="myTab3" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="percentage1" data-toggle="tab" href="#percentage" role="tab" aria-controls="percentage" aria-selected="true">Percentage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="amount1" data-toggle="tab" href="#amount" role="tab" aria-controls="amount" aria-selected="false">Amount In cash</a>
+        </ul>
+      </div>
+      <div class="tab-content" id="myTabContent1">
+        <div class="tab-pane fade" id="percentage" role="tabpanel">
+          <div class="card-body" >
+            <canvas id="general_percentage_chart"></canvas>
+          </div>
+        </div>
+        <div class="tab-pane fade show active" id="amount" role="tabpanel">
+          <div class="card-body" >
+            <canvas id="general_amount_chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+</div>
+
 
 
 <script src="<?php echo base_url('assets/js/page/general_dashboard.js')?>"></script>

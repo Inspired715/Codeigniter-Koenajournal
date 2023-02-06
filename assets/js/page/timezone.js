@@ -1,5 +1,65 @@
 reloadTimeZone();
 
+function reloadTimezoneSession(timezone) {
+  var sessionGMT = $("#sessionGMT").val();
+
+  $.ajax({
+    url: BASE_URL + "timezone/spTimezoneSession",
+    method: "POST",
+    data: {
+      account_id: _account_id,
+      timezone: timezone,
+      baseGMT:3
+    },
+    success: function (response) {
+      console.log(response);
+      response = JSON.parse(response);
+      // console.log(response);
+      
+      if (response["status"] == "success") {
+        var data = response["data"]['data'];
+        console.log(data)
+        $("#tableNumberTradeOpen tbody").empty();
+        
+
+        $.each( data, function( key, value ) {
+      var OrderType = '';
+      if (value.OrderType=='Buy') {
+        OrderType = '<span class="badge light badge-success">Buy</span>';
+      } else if (value.OrderType=='Sell') {
+        OrderType = '<span class="badge light badge-info">Sell</span>';
+      }
+      
+      var ProfitType = '';
+      if (value.Profit > 0) {
+              ProfitType =  '<span class="badge light badge-success">WON</span>';
+            } else {
+              ProfitType = '<span class="badge light badge-danger">Loss </span>';
+            }
+          //alert( key + ": " + value );
+          $("#tableNumberTradeOpen tbody").append(
+            `<tr>
+                  <td>${value.OrderNumber}</td>
+                  <td class='ct'>${value.Symbol}</td>
+                  <td class='ct'>${OrderType}</td>
+                  <td class='ct'>${value.OrderSize}</td>
+                  <td class='ct'>${ProfitType} ${value.Profit}</td>
+             </tr>`
+          );
+        });
+
+        
+        $('#modalTimezoneSession').modal('show');
+      } else {
+        // notifyme.showNotification(response["status"], response["message"]);
+      }
+    },
+  });
+
+  
+}
+
+
 function reloadTimeZone(sessionGMT) {
   $.ajax({
     url: BASE_URL + '/timezone/getTableData',

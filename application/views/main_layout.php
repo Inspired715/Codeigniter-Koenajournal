@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css')?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/modules/ionicons/css/ionicons.min.css')?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/modules/fullcalendar/fullcalendar.min.css')?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/css/photoswipe.css')?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/css/photoswipe.default-skin.css')?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/css/style.css')?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/css/components.css')?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/css/custom.css')?>">
@@ -24,6 +26,8 @@
   <script src="<?php echo base_url('assets/modules/bootstrap/js/bootstrap.min.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/moment.min.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/chart.min.js')?>"></script>
+  <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js'></script>
+  <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js'></script>
   <script src="<?php echo base_url('assets/modules/datatables/datatables.min.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js')?>"></script>
   <script src="<?php echo base_url('assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js')?>"></script>
@@ -44,9 +48,9 @@
       e.preventDefault();
       var formData = new FormData(this);
       var callback = $(this).attr('callback');
-
+      var url = $(this).attr('action');
       $.ajax({
-        url: BASE_URL + "/summary/changeSSTimeframe",
+        url: BASE_URL + url,
         type: "POST",
         data: formData,
         cache: false,
@@ -94,11 +98,11 @@
         <div class="modal-body">
           <table id="tableCalTransactionData" class="table table-striped">
             <thead>
-              <td>Ticket</td>
-              <td>Symbol</td>
-              <td>Type</td>
-              <td>Lots</td>
-              <td>Outcome</td>
+              <td class="sect-td">Ticket</td>
+              <td class="sect-td">Symbol</td>
+              <td class="sect-td">Type</td>
+              <td class="sect-td">Lots</td>
+              <td class="sect-td">Outcome</td>
             </thead>
             <tbody>
             </tbody>
@@ -125,11 +129,11 @@
               <input type="hidden" id="JournalSummaryGridGrpValue" name="JournalSummaryGridGrpValue" class="form-control" />
               <table class="table table-striped">
                 <thead>
-                  <td>Ticket</td>
-                  <td>Symbol</td>
-                  <td>Type</td>
-                  <td>Lots</td>
-                  <td>Outcome</td>
+                  <td class="sect_td">Ticket</td>
+                  <td class="sect_td">Symbol</td>
+                  <td class="sect_td">Type</td>
+                  <td class="sect_td">Lots</td>
+                  <td class="sect_td">Outcome</td>
                 </thead>
                 <tbody id="jornalModalRows">
                 </tbody>
@@ -252,7 +256,7 @@
             <br>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary mr-3" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-purple mr-3" data-dismiss="modal">Close</button>
                 <input type="submit" value="Save" class="btn btn-primary" name="submits">
             </div>
             <?php include 'assets/templates/journal-main-modal/timeframe-forms-all.php'; ?>
@@ -262,6 +266,7 @@
     </div>
   </div>
 </div>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="trade_journal_grouped_modal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -289,6 +294,40 @@
   </div>
 </div>
 <div class="modal fade" tabindex="-1" role="dialog" id="best_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width:650px;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="best_trade_modal_title">Best Hour Trade</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <!-- <span aria-hidden="true">&times;</span> -->
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="card-body">
+          <div style="height: 400px; overflow-y:scroll;">
+            <table id="tableNumberTradeOpen" class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="sect_td" scope="col">Ticket</th>
+                  <th class="sect_td" scope="col">Symbol</th>
+                  <th class="sect_td" scope="col">Type</th>
+                  <th class="sect_td" scope="col">Lots</th>
+                  <th class="sect_td" scope="col">Outcome</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalTimezoneSession">
   <div class="modal-dialog" role="document">
     <div class="modal-content" style="width:650px;">
       <div class="modal-header">
@@ -463,13 +502,165 @@
       
         </div>
         <div class="modal-footer">   
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-purple" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </form>  
     </div>   
   </div>
 </div> 
+<!-- Modal Journal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalOpenJournal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="account_edit_modal_title">Trade Journal</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="openJournal_detail">
+                <form method="post" id="accountDetailsModalInsertUpdate">
+                    <input type="hidden" id="jHas" name="jHas" class="form-control" value="" />
+                    <input type="hidden" id="jTicket" name="jTicket" class="form-control" value="" />
+                    <input type="hidden" id="jEmail" name="jEmail" class="form-control" value="<?php echo $_SESSION['email'] ?>" />
+
+                    <table id="sectionTwoT1" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="sect_td">Ticket </th>
+                                <th class="sect_td">Symbol </th>
+                                <th class="sect_td">Type </th>
+                                <th class="sect_td">Lots </th>
+                                <th class="sect_td">Outcome </th>
+                            </tr>
+                        </thead>
+                        <tbody id='accountModalRows'>
+                        </tbody>
+                    </table>
+
+                    <div class="container mt-4 my-4">
+                        <div class="textbox-wrapper row">
+                            <div class="col-md-6">
+                                <ul class="navbar-nav navbar-right">
+                                    <li>
+                                    <?php include 'assets/templates/journal-modal/used.php'; ?>
+                                    </li>
+                                    <li>
+                                    <?php include 'assets/templates/journal-modal/entry.php'; ?>
+                                    </li>
+                                    <li>
+                                    <?php include 'assets/templates/journal-modal/outcome.php'; ?>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="navbar-nav navbar-right">
+                                    <li>
+                                      <?php include 'assets/templates/journal-modal/improve.php'; ?>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row fancygall">
+                            <div class="col-md-3">
+                                <?php  $timeframeId = "TimeFrame11";
+                                    include 'assets/templates/journal-modal/select-timeframe.php'; ?>
+                            </div>
+                            <div class="col-md-3">
+                                <?php  $timeframeId = "TimeFrame21";
+                                    include 'assets/templates/journal-modal/select-timeframe.php'; ?>
+                            </div>
+                            <div class="col-md-3">
+                                <?php  $timeframeId = "TimeFrame31";
+                                    include 'assets/templates/journal-modal/select-timeframe.php'; ?>
+                            </div>
+                            <div class="col-md-3">
+                                <?php  $timeframeId = "TimeFrame41";
+                                  
+                                    include 'assets/templates/journal-modal/select-timeframe.php'; ?>
+                            </div>
+                              <div class="col-md-3">
+                                <?php  $timeframeId = "TimeFrame51";
+                                  include 'assets/templates/journal-modal/select-timeframe.php'; ?>
+                              </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-purple mr-3" data-dismiss="modal">Close</button>
+                            <input type="submit" id="submitaccount" value="Save" class="btn btn-primary" name="submits">
+                        </div>
+                        <?php include 'assets/templates/journal-modal/timeframe-forms-all.php'; ?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='pswp' tabindex='-1' role='dialog' aria-hidden='true'>
+  <div class='pswp__bg'></div>
+  <div class='pswp__scroll-wrap'>
+    <!-- Container that holds slides. PhotoSwipe keeps only 3 of them in the DOM to save memory. Don't modify these 3 pswp__item elements, data is added later on. --> 
+    <div class='pswp__container'> 
+      <div class='pswp__item'></div>
+      <div class='pswp__item'></div>
+      <div class='pswp__item'></div>
+    </div>
+    <div class='pswp__ui pswp__ui--hidden'> 
+      <div class='pswp__top-bar'> 
+        <div class='pswp__counter'></div>
+        <span class='pswp__button pswp__button--close' title='Close (Esc)'></span> 
+        <span class='pswp__button pswp__button--share' title='Share'></span> 
+        <span class='pswp__button pswp__button--fs' title='Toggle fullscreen'></span> 
+        <span class='pswp__button pswp__button--zoom' title='Zoom in/out'></span> 
+        <div class='pswp__preloader'> <div class='pswp__preloader__icn'> 
+          <div class='pswp__preloader__cut'> <div class='pswp__preloader__donut'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class='pswp__share-modal pswp__share-modal--hidden pswp__single-tap'> 
+    <div class='pswp__share-tooltip'></div>
+  </div>
+  <span class='pswp__button pswp__button--arrow--left' title='Previous (arrow left)'> </span> 
+  <span class='pswp__button pswp__button--arrow--right' title='Next (arrow right)'> </span> 
+  <div class='pswp__caption'> 
+    <div class='pswp__caption__center'></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Modal Reason -->
+<div id="reasonAdd" class="modal fade" >
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close btn-purple" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" id="reasonForm" class="inputt">
+                <div class="modal-body" id="reasonDetail">
+                    <div class="input-group my-3">
+                        <!-- <input type="text" id="reasonValue" name="reasonValue" class="form-control reasonValue" required placeholder=""> -->
+                        <textarea id="reasonValue" name="reasonValue" style="height: 100% !important;" class="form-control chart-wrapper reasonValue" rows="8" required placeholder=""></textarea>
+                        <input type="hidden" id="reasonType" name="reasonType" class="form-control reasonType" value="" />
+                        <input type="hidden" id="user_id" name="user_id" class="form-control" value="<?php echo $_SESSION["user_id"]; ?>" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary mr-3" data-dismiss="modal">Close</button>
+                    <input type="submit" name="reasonsave" id="reasonSave" value="Save" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
   <div id="app">
     <div class="main-wrapper main-wrapper-1">
       <div class="navbar-bg"></div>
@@ -532,36 +723,17 @@
             <a href="<?php echo base_url('dashboard')?>">KN</a>
           </div>
           <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
-            <li class="dropdown nav-side-bar" data-selection="dashboard">
-              <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Charts</span></a>
-              <ul class="dropdown-menu">
-                <?php
-                  if($_SESSION["usertype_id"] < 2) { ?>
-                   <li data-selection="admin" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('dashboard/index') ?>">Admin Dashboard</a></li>
-                  <?php }
-                ?>
-                <li data-selection="general" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('dashboard/general') ?>">General Dashboard</a></li>
-              </ul>
-            </li>
-            <li class="menu-header">Summary</li>
-            <li class="dropdown nav-side-bar" data-selection="summary">
-              <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Summary</span></a>
-              <ul class="dropdown-menu">
-                <li data-selection="journal" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('summary/journal') ?>">Joural Summary</a></li>
-                <li data-selection="account" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('summary/account') ?>">Account Summary</a></li>
-              </ul>
-            </li>
-            <li class="menu-header">Session</li>
-            <li data-selection="session" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('timezone/') ?>"><i class="far fa-square"></i> <span>Sessions</span></a></li>
-            <li class="menu-header">Personal</li>
-            <li class="dropdown nav-side-bar" data-selection="user">
-              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>User</span></a>
-              <ul class="dropdown-menu">
-                <li data-selection="profile" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('profile') ?>">Profile</a></li>
-                <li data-selection="plan" class="nav-side-bar"><a class="nav-link" href="<?php echo base_url('profile/plan') ?>">Plan</a></li>
-              </ul>
-            </li>
+            <?php
+              if($_SESSION["usertype_id"] < 2) { ?>
+                <li data-selection="admin" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('dashboard/index') ?>"><i class="ion-lock-combination"></i>Admin Dashboard</a></div></li>
+              <?php }
+            ?>
+            <li data-selection="general" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('dashboard/general') ?>"><i class="ion-ios-paper"></i>General Dashboard</a></div></li>
+            <li data-selection="journal" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('summary/journal') ?>"><i class="ion-social-buffer"></i>Joural Summary</a></div></li>
+            <li data-selection="account" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('summary/account') ?>"><i class="ion-social-chrome"></i>Account Summary</a></div></li>
+            <li data-selection="profile" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('timezone') ?>"><i class="ion-transgender"></i>Session</a></div></li>
+            <li data-selection="profile" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('profile') ?>"><i class="ion-transgender"></i>Profile</a></div></li>
+            <li data-selection="plan" class="nav-side-bar"><div class="sel-li"><a href="<?php echo base_url('profile/plan') ?>"><i class="ion-calendar"></i>Plan</a></div></li>
           </ul>
        </aside>
        <script>

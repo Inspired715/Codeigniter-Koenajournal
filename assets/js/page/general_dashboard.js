@@ -1,43 +1,8 @@
 "use strict";
-
-var strength_chart = ''
-var profit_chart = ''
-
-function get_general_symbols() {
-  $.ajax({
-    url: "getAccountSymbols",
-    method: "POST",
-    data: {
-      account_id: _account_id,
-    },
-    success: function (response) {
-      response = JSON.parse(response);
-      if (response["status"] == "success") {
-
-        var data = [];
-        var xValues = [];
-        data = response["data"][0];    
-        $("#general_symbol_chart").empty();
-        // data.map((d) => {
-        //   $("#general_symbol_chart").append(
-        //     `<option value="${d.symbol}">${d.symbol}</option>`
-        //   );
-        // });
-        data.map((d) => {
-          xValues.push(d.symbol);
-        });
-
-        var yValues = [data.TotalWins, data.TotalLooses];
-      } else {
-        notifyme.showNotification(response["status"], response["message"]);
-      }
-    },
-  });
-}
-
-
+var strength_chart;
 //Get Symbols Dashboard Filter
 function getSymbolsChart_filter(filterType) {
+
   $.ajax({
     url: "getSymbolChartsFilter",
     method: "POST",
@@ -48,6 +13,7 @@ function getSymbolsChart_filter(filterType) {
       //symbols: symbols,
     },
     success: function (response) {
+
       var data = [];
       response = JSON.parse(response);
       
@@ -77,6 +43,9 @@ function getSymbolsChart_filter(filterType) {
         yPLValues.push(d.Profit);
       });
 
+    if(strength_chart)
+      strength_chart.destroy();
+
       strength_chart = new Chart("strength_chart", {
         type: "bar",
         data: {
@@ -92,8 +61,14 @@ function getSymbolsChart_filter(filterType) {
 
         }
       });
+      // strength_chart.data.labels = xValues;
+      // strength_chart.data.datasets[0].data = yValues;
+      // console.log(strength_chart.data.datasets[0]);
+      // strength_chart.data.datasets[0].backgroundColor = barColors;
 
-      profit_chart = new Chart("profit_chart", {
+      // strength_chart.update();
+
+      var profit_chart = new Chart("profit_chart", {
         type: "bar",
         data: {
           labels: xPLValues,
@@ -114,24 +89,24 @@ function getSymbolsChart_filter(filterType) {
     },
   });
 }
-
 //Get Symbols Dashboard
 function get_symbol_chart() {
+  var filter_type = 1;
   $.ajax({
     url: "getSymbolCharts",
     method: "POST",
     data: {
-      action: "getSymbolCharts",
       account_id: _account_id,
-      // filter_type: filterType,
+      filter_type: filter_type,
       // period: $('#period').val(),
       //symbols: symbols,
     },
     success: function (response) {
       var data = [];
       response = JSON.parse(response);
+      console.log(response);
       if (response["status"] == "success") {
-        data = response;
+        data = response['data'];
         var xValues = [];
         var yValues = [];
 
@@ -197,7 +172,7 @@ function get_symbol_chart() {
 function get_Total_TradeSummary() {
   
   $.ajax({
-    url: "getTotalTradeSummary",
+    url: BASE_URL + "dashboard/getTotalTradeSummary",
     method: "POST",
     data: {
       account_id: _account_id
@@ -514,7 +489,7 @@ function get_Total_TradeSummary() {
 
 function getTotalTradeSummary_filter(filterType) {
   $.ajax({
-    url: "getTotalTradeSummaryFilter",
+    url: BASE_URL + "dashboard/getTotalTradeSummaryFilter",
     method: "POST",
     data: {
       action: "getTotalTradeSummaryFilter",
@@ -856,32 +831,75 @@ function getPerformanceGrowth() {
           "#1e7145"
         ];
 
-        data.map((d) => { 
-          xValues.push(d.months);
-          yValues.push(Number(d.profit).toFixed(2));
-        });
-    
-        data.map((d) => { 
-          xCValues.push(d.months);
-          yCValues.push(Number(d.cash).toFixed(2));
-        });
+        console.log(data);
+        if(data != undefined) {
 
-        var general_percentage_chart = new Chart("general_percentage_chart", {
-        type: "bar",
-        data: {
-          labels: xValues,
-          datasets: [{
-            backgroundColor: barColors,
-            data: yValues,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          legend: { display: false },
-
+          data.map((d) => {
+            if(d.months == undefined ) {
+              d.months = "";
+            }
+            xValues.push(d.months);
+            yValues.push(Number(d.profit).toFixed(2));
+          });
+      
+          data.map((d) => { 
+            if(d.months == undefined ) {
+              d.months = "";
+            }
+            xCValues.push(d.months);
+            yCValues.push(Number(d.cash).toFixed(2));
+          });
         }
-      });
+        else {
+          var xValues = [];
+          var yValues = [];
 
+          var xCValues = [];
+          var yCValues = [];
+        }
+
+        var label = "%";
+        var general_percentage_chart = new Chart("general_percentage_chart", {
+          type: "bar",
+          
+          data: {
+            labels: xValues,
+            datasets: [{
+              backgroundColor: barColors,
+              data: yValues,
+              // borderSkipped: false
+            }]
+          },
+          options: {
+            tooltips: {
+              enabled: true
+            },
+            hover: {
+              animationDuration: 1
+            },
+            animation: {
+              duration: 1,
+              onComplete: function () {
+                var chartInstance = this.chart,
+                ctx = chartInstance.ctx;
+                ctx.textAlign = 'center';
+                ctx.fillStyle = "rgba(0, 0, 0, 1)";
+                ctx.textBaseline = 'bottom';
+
+                this.data.datasets.forEach(function (dataset, i) {
+                  var meta = chartInstance.controller.getDatasetMeta(i);
+                  meta.data.forEach(function (bar, index) {
+                    var data = dataset.data[index];
+                    ctx.fillText(data+"%", bar._model.x, bar._model.y - 5);
+
+                  });
+                });
+              }
+            }
+
+          }
+        });
+      var label1 = "Cash"
       var general_amount_chart = new Chart("general_amount_chart", {
         type: "bar",
         data: {
@@ -892,10 +910,38 @@ function getPerformanceGrowth() {
             borderSkipped: false
           }]
         },
+        marker: {
+          visible: true,
+          shape:'Diamond',
+        },
         options: {
-          legend: { display: false },
+            tooltips: {
+              enabled: true
+            },
+            hover: {
+              animationDuration: 1
+            },
+            animation: {
+              duration: 1,
+              onComplete: function () {
+                var chartInstance = this.chart,
+                ctx = chartInstance.ctx;
+                ctx.textAlign = 'center';
+                ctx.fillStyle = "rgba(0, 0, 0, 1)";
+                ctx.textBaseline = 'bottom';
 
-        }
+                this.data.datasets.forEach(function (dataset, i) {
+                  var meta = chartInstance.controller.getDatasetMeta(i);
+                  meta.data.forEach(function (bar, index) {
+                    var data = dataset.data[index];
+                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+
+                  });
+                });
+              }
+            }
+
+          }
       });       
         
       } else {
@@ -961,15 +1007,17 @@ function getAccountSummary() {
         $("#spanAverageLotStraded").text(Number(data[0][0].averagelotstraded).toFixed(2));
         $("#spanTotalCommissionAmount").text(Number(data[0][0].totalcommissionamount).toFixed(2));
         $("#spanTotalSwapAmount").text(Number(data[0][0].totalswapamount).toFixed(2));
-
+        if(avaTradeTime != null) 
+          var avaTradeTime = (data[0][0].AvgTradeTime).slice(0, 8);
+        else avaTradeTime = "";
         $("#general_insight_list tbody").append(
           `<tr>
-            <td>${data[0][0].AvgTradeTime}</td>
-            <td>${Number(data[0][0].consecutivewin)}</td>
-            <td>${Number(data[0][0].consecutiveloss)}</td>
-            <td>${Number(data[0][0].averagelotstraded).toFixed(2)}</td>
-            <td>${Number(data[0][0].largestprofittrade).toFixed(2)}</td>
-            <td>${Number(data[0][0].largestlosstrade).toFixed(2)}</td>
+            <td class="sect_td2">${avaTradeTime}</td>
+            <td class="sect_td2">${Number(data[0][0].consecutivewin)}</td>
+            <td class="sect_td2">${Number(data[0][0].consecutiveloss)}</td>
+            <td class="sect_td2">${Number(data[0][0].averagelotstraded).toFixed(2)}</td>
+            <td class="sect_td2"><div class="col-md-12 dChartCpT tooltipM"><span id="spanLargestProfitTrade" >${Number(data[0][0].largestprofittrade).toFixed(2)}</span><div id="spanLargestProfitTradeTooltip"><ul><li><b>Ticket</b> : <span id="alptTicket">${data[0][0].OrderNumber}</span></li><li><b>Symbol</b> : <span id="alptTicket">${data[0][0].Symbol}</span></li></ul></div></div></td>
+            <td class="sect_td2"><div class="col-md-12 dChartCpT tooltipM"><span id="spanLargestProfitTrade" >${Number(data[0][0].largestlosstrade).toFixed(2)}</span><div id="spanLargestProfitTradeTooltip"><ul><li><b>Ticket</b> : <span id="alptTicket">${data[0][0].lOrderNumber}</span></li><li><b>Symbol</b> : <span id="alptTicket">${data[0][0].lSymbol}</span></li></ul></div></div></td>
            </tr>`
         );
 
